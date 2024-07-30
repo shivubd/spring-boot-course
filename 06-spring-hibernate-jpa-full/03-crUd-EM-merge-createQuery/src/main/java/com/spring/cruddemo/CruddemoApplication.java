@@ -32,8 +32,10 @@ public class CruddemoApplication {
 //			findStudentById();
 //			findAllStudents();
 //			findStudentsGreaterThan();
-			updateStudentNameById();
-			updateStudentsNameByMailType();
+//			updateStudentNameById();
+//			updateStudentsNameByMailType();
+			deleteStudentById();
+			deleteStudentsByMailType();
 		};
 	}
 	//THIS RUNS AFTER ALL THE BEANS ARE LOADED
@@ -107,6 +109,27 @@ public class CruddemoApplication {
 			System.out.println(rowsAffected + " Students updated successfully");
 		} else {
 			System.out.println("No students updated");
+		}
+	}
+
+	public void deleteStudentById() {
+		int givenId = 1;
+		int deletedRows = studentDao.deleteStudentById(givenId);
+		if(deletedRows == 1) {
+			System.out.println("Student is deleted successfully with id = " + givenId);
+		} else {
+			System.out.println("Found no student to delete with id = " + givenId);
+		}
+	}
+
+	public void deleteStudentsByMailType() {
+		String mailType = "@gmail.com";
+		int rowsAffected = studentDao.deleteStudentsByMailType(mailType);
+		System.out.println("BULK DELETE");
+		if(rowsAffected > 0) {
+			System.out.println(rowsAffected + " Students deleted successfully");
+		} else {
+			System.out.println("No students deleted");
 		}
 	}
 }

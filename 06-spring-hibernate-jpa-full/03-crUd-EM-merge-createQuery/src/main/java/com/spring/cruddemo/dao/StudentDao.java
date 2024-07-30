@@ -11,4 +11,6 @@ public interface StudentDao {
     public List<Student> findStudentsWithIdGreaterThan(int id);
     public void updateStudentNameById(Student student);
     public int updateStudentsLastNameByMailType(String mailType, String changedName);
+    public int deleteStudentById(int id);
+    public int deleteStudentsByMailType(String mailType);
 }

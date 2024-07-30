@@ -44,6 +44,23 @@ public class StudentDaoImpl implements StudentDao {
 
     @Transactional
     public int updateStudentsLastNameByMailType(String mailType, String changedName) {
-        return entityManager.createQuery("UPDATE Student SET lastName = 'TestBulkUpdate' WHERE email LIKE '%@gmail.com'").executeUpdate();
+        String query = "UPDATE Student SET lastName = '" + changedName + "' WHERE email LIKE '%" + mailType + "'";
+        return entityManager.createQuery(query).executeUpdate();
+    }
+    @Transactional
+    public int deleteStudentById(int id) {
+        Student student = entityManager.find(Student.class, id);
+        //We need to fetch the object required to delete inside this method because if we fetch it outside,
+        // entity manager will be managing that object and we cannot delete that.
+        if(student != null) {
+            entityManager.remove(student);
+            return 1;
+        } else return 0;
+    }
+
+    @Transactional
+    public int deleteStudentsByMailType(String mailType) {
+        String query = "DELETE FROM Student WHERE email NOT LIKE '%"+mailType+"'";
+        return entityManager.createQuery(query).executeUpdate();
     }
 }
