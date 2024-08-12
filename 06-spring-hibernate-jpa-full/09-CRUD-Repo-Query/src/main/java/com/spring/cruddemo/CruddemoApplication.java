@@ -1,0 +1,127 @@
+package com.spring.cruddemo;
+
+import com.spring.cruddemo.dao.StudentDao;
+import com.spring.cruddemo.entity.Student;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import java.util.List;
+
+@SpringBootApplication
+public class CruddemoApplication {
+
+	private StudentDao studentDao;
+
+	@Autowired
+	public CruddemoApplication(StudentDao studentDao) {
+		this.studentDao = studentDao;
+	}
+
+	public static void main(String[] args) {
+		SpringApplication.run(CruddemoApplication.class, args);
+	}
+
+	@Bean
+	public CommandLineRunner commandLineRunner(String[] args) {
+		return runner -> {
+			System.out.println("App start");
+//			createStudent();
+//			findStudentById();
+//			findAllStudents();
+//			updateStudentNameById();
+//			deleteStudentById();
+//			deleteAllStudents();
+//			getStudentsListIdGreaterThan();
+//			getStudentLastNameContains();
+//			updateLastOfStudentWithId();
+			deleteStudentWithName();
+		};
+	}
+	//THIS RUNS AFTER ALL THE BEANS ARE LOADED
+
+	public void createStudent() {
+		Student student = new Student("Test","t", "test@outlook.com");
+		System.out.println("Creating a new Student\n" + student.toString());
+		studentDao.save(student);
+		System.out.println("Create successfully! Student id = "+student.getId());
+	}
+
+	public void findStudentById() {
+		int givenId = 8;
+		Student student = studentDao.findStudentById(givenId);
+		if(student != null) {
+			System.out.println("Found student");
+			System.out.println(student.toString());
+		} else {
+			System.out.println("No Student found with id = " + givenId);
+		}
+		System.out.println();
+	}
+
+	public void findAllStudents() {
+		List<Student> studentList = studentDao.findAllStudents();
+		if(!studentList.isEmpty()) {
+			System.out.println("STUDENTS LIST");
+			studentList.forEach(student -> {
+				System.out.println(student.toString());
+			});
+		} else {
+			System.out.println("NO STUDENTS FOUND");
+		}
+		System.out.println();
+	}
+
+	public void updateStudentNameById() {
+		int id = 7;
+		String changedFirstName = "Swati";
+		Student changedStudent = studentDao.updateStudentNameById(id, changedFirstName);
+		if(changedStudent != null) {
+			System.out.println("UPDATED STUDENT");
+			System.out.println(changedStudent.toString());
+		} else {
+			System.out.println("NO STUDENT TO UPDATED WITH id = " + id);
+		}
+	}
+
+	public void deleteStudentById() {
+		int id = 6;
+		int rowsAffected = studentDao.deleteStudentById(id);
+		if(rowsAffected > 0) {
+			System.out.println("Student deleted successfully with id = " + id);
+		} else {
+			System.out.println("No student found with id " + id);
+		}
+	}
+
+	public void deleteAllStudents() {
+		int rowsAffected = studentDao.deleteAllStudents();
+		if(rowsAffected > 0) {
+			System.out.println("All students are deleted successfully");
+		} else {
+			System.out.println("No students found to delete");
+		}
+	}
+
+	public void getStudentsListIdGreaterThan() {
+		studentDao.getStudentsListIdGreaterThan(12).forEach(System.out::println);
+	}
+
+	public void getStudentLastNameContains() {
+		studentDao.getStudentLastNameContains("eyan").forEach(System.out::println);
+	}
+
+	public void updateLastOfStudentWithId() {
+		studentDao.updateLastOfStudentWithId(12, "UpdateTest");
+		System.out.println(studentDao.findStudentById(12).toString());
+	}
+
+	public void deleteStudentWithName() {
+		studentDao.findAllStudents().forEach(System.out::println);
+		studentDao.deleteStudentWithName("Shivaraj");
+		System.out.println("After Delete");
+		studentDao.findAllStudents().forEach(System.out::println);
+	}
+}
